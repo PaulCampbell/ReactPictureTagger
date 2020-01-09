@@ -16,6 +16,7 @@ const Tagger = ({
   const [resizeRatio, setResizeRatio] = useState(1)
   const [rect, setRect] = useState({})
   const [drag, setDrag] = useState(false)
+  const [newTag, setNewTag] = useState(null)
 
   const canvasRef = useRef(null)
 
@@ -97,14 +98,17 @@ const Tagger = ({
   }
 
   function mouseUp() {
-    setDrag(false)
-    // setNewTag({
-    //   left: startX > finishX ? finishX : startX,
-    //   top: startY > finishY ? finishY : startY,
-    //   width: tag.width * resizeRatio,
-    //   height: tag.height * resizeRatio,
-    //   name: ''
-    // })
+    if(drag) {
+      setDrag(false)
+      setNewTag({
+        left: rect.startX > rect.finishX ? rect.finishX : rect.startX,
+        top: rect.startY > rect.finishY ? rect.finishY : rect.startY,
+        width: rect.startX > rect.finishX ? rect.startX - rect.finishX : rect.finishX - rect.startX,
+        height: rect.startY > rect.finishY ? rect.startY - rect.finishY : rect.finishY - rect.startY,
+        name: ''
+      })
+      setAddTagMode(false)
+    }
   }
 
   function mouseMove(e) {
@@ -187,6 +191,21 @@ const Tagger = ({
                 <span className="reactPictureTagger-tagName" style={ tagNameStyle }>{tag.name}</span>
               </div>
             })
+          : null }
+
+
+          { newTag ?
+              <div className="reactPictureTagger-newTag"
+                   style={
+                     {
+                        left: newTag.left,
+                        top: newTag.top,
+                        width: newTag.width,
+                        height: newTag.height
+                     }
+                   }>
+              new tag, yo!
+              </div>
           : null }
         </div>
       </div>

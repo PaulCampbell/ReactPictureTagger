@@ -30,3 +30,12 @@
 .reactPictureTagger-tagControls a {
   padding-right: 8px;
 }
+
+.reactPictureTagger-newTag {
+  position: absolute;
+  border: dashed 2px orange;
+  background-color:rgba(0, 0, 0, 0.5);
+  color: white;
+  font-weight:bold;
+  padding:3px;
+}
