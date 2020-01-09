@@ -54,8 +54,8 @@ const Tagger = ({
     }
     while(currentElement = currentElement.offsetParent)
 
-    canvasX = event.pageX - totalOffsetX
-    canvasY = event.pageY - totalOffsetY
+    canvasX = event.pageX - totalOffsetX - window.scrollX
+    canvasY = event.pageY - totalOffsetY - window.scrollY
 
     return {x:canvasX, y:canvasY}
   }
@@ -129,7 +129,7 @@ const Tagger = ({
   function draw() {
     if (drag) {
       const canvas = canvasRef.current
-      const canvasRatio = canvas.width / canvas.offsetWidth 
+      const canvasRatio = canvas.width / canvas.offsetWidth
       const context = canvas.getContext('2d')
       context.clearRect(0, 0, canvas.width, canvas.height)
       context.drawImage(image, 0, 0, canvas.width, canvas.height)
@@ -179,7 +179,14 @@ const Tagger = ({
     // always cause a re-render... force a short wait
     new Promise(resolve => {
       setTimeout(() => {
-        setAllTags(allTags.concat([newTag]))
+        setAllTags(allTags.concat([
+          Object.assign(newTag, {
+            top: newTag.top / resizeRatio,
+            left: newTag.left / resizeRatio,
+            width: newTag.width / resizeRatio,
+            height: newTag.height / resizeRatio
+          })
+        ]))
         setAddTagMode(false)
         setNewTag(null)
         setTagsVisible(true, true)
