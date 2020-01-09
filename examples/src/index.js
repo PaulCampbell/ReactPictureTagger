@@ -9,8 +9,8 @@ const App = () => {
       imageSrc: './muppets.png',
       imgAlt: 'muppets',
       tags: [
-        { topLeft: [220, 57], bottomRight:[170, 1], name: 'Kermit' },
-        { topLeft: [20, 37], bottomRight:[380, 1], name: 'Gonzo' },
+        { top: 128, left: 5, width: 180, height: 190, name: 'Rizzo' },
+        { top: 8, left: 180, width: 500, height:410, name: 'Gonzo' },
       ]
     })
     return (

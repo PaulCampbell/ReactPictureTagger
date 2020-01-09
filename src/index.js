@@ -12,6 +12,9 @@ const Tagger = ({
 }) => {
   const [tagsVisible, setTagsVisible] = useState(false)
   const [addTagMode, setAddTagMode] = useState(false)
+  const [imageWidth, setImageWidth] = useState(null)
+  const [resizeRatio, setResizeRatio] = useState(1)
+  const canvasRef = useRef(null)
 
   const tagColors = [
      '#20629B', '#F6D55C', '#3CAEA3', '#ED553B', '#173f5f',
@@ -21,10 +24,38 @@ const Tagger = ({
     setTagsVisible(!tagsVisible)
   }
 
-  function startAddTagMode() {
-    setTagsVisible(true)
-    setAddTagMode(true)
+  function toggleAddTagMode() {
+    if(!addTagMode) {
+      setTagsVisible(false)
+    }
+    setAddTagMode(!addTagMode)
   }
+
+  function drawImageOnCanvas() {
+    const canvas = canvasRef.current
+    const ctx = canvas.getContext('2d')
+    const image = new Image()
+    image.src = imageSrc
+    image.onload = () => {
+      const imageAspectRatio = image.height / image.width
+      canvas.height = canvas.width * imageAspectRatio;
+      setImageWidth(image.width)
+      setResizeRatio(canvas.scrollWidth / image.width)
+      ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
+    }
+  }
+
+  function handleResize() {
+    const canvas = canvasRef.current
+    const newRatio = canvas.scrollWidth / imageWidth
+    setResizeRatio(newRatio)
+  }
+
+  useEffect(() => {
+    drawImageOnCanvas()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  })
 
   return (
       <div className="reactPictureTagger" style={addTagMode ? { cursor: 'copy'} : null }>
@@ -35,20 +66,22 @@ const Tagger = ({
               : <FontAwesomeIcon icon={faEye} />
             }
           </a>
-          <a onClick={startAddTagMode} title="Add tag">
-            <FontAwesomeIcon icon={faPlus} />
+          <a onClick={toggleAddTagMode} title="Add tag">
+            <FontAwesomeIcon icon={faPlus} style={ addTagMode ? { color: "#721c24" } : null } />
           </a>
         </div>
         <div className="reactPictureTagger-pictureContainer">
-          <img src={imageSrc} alt={imageAlt} />
+          <canvas ref={canvasRef}>
+          </canvas>
           { tagsVisible ?
             tags.map((tag, index) => {
               const tagStyle = {
-                left: tag.topLeft[0],
-                top: tag.topLeft[1],
-                right: tag.bottomRight[0],
-                bottom: tag.bottomRight[1],
-                borderColor: tagColors[index]
+                left: tag.left * resizeRatio,
+                top: tag.top * resizeRatio,
+                width: tag.width * resizeRatio,
+                height: tag.height * resizeRatio,
+                borderColor: tagColors[index],
+                cursor: addTagMode ? '' : 'pointer'
               }
               const tagNameStyle = {
                 "background-color": tagColors[index]

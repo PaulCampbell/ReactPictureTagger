@@ -2,12 +2,11 @@
   position: relative;
 }
 
-.reactPictureTagger-pictureContainer img {
-  max-width: 100%;
+.reactPictureTagger-pictureContainer canvas {
+  width: 100%;
 }
 
 .reactPictureTagger-tag {
-  cursor: pointer;
   opacity: 0.6;
   position: absolute;
   border: solid 2px;
