@@ -49,3 +49,14 @@
   font-weight: bold;
   padding: 3px;
 }
+
+.reactPictureTagger-newTag-instructions {
+  position: absolute;
+  top: 0px;
+  background-color: rgba(255,255,255,0.75);
+  width: 100%;
+  padding: 6px 3px;
+  font-size: 1.2em;
+  font-weight: bold;
+  text-align: center;
+}

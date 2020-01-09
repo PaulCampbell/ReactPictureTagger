@@ -11,10 +11,10 @@ const TagCreator = ({ newTag, clearTag, submitTag }) => {
 
   function handleSubmit(e) {
     if(e.keyCode == 13) {
-      submitTag()
+      return submitTag()
     }
     if(e.keyCode == 27) {
-      clearTag()
+      return clearTag()
     }
   }
 

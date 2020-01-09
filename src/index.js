@@ -11,6 +11,7 @@ const Tagger = ({
   imageAlt,
   tags
 }) => {
+  const [allTags, setAllTags] = useState(tags)
   const [tagsVisible, setTagsVisible] = useState(false)
   const [addTagMode, setAddTagMode] = useState(false)
   const [imageWidth, setImageWidth] = useState(null)
@@ -28,7 +29,9 @@ const Tagger = ({
   ]
 
   function toggleTags() {
-    setTagsVisible(!tagsVisible)
+    if(!addTagMode) {
+      setTagsVisible(!tagsVisible)
+    }
   }
 
   function toggleAddTagMode() {
@@ -153,9 +156,11 @@ const Tagger = ({
     drawImageOnCanvas()
     setupCanvasEventListeners()
     window.addEventListener('resize', handleResize)
+    document.addEventListener("keydown", toggleAddTagMode, false);
     return () => {
       window.removeEventListener('resize', handleResize)
       removeCanvasEventListeners()
+      document.removeEventListener("keydown", toggleAddTagMode, false);
     }
   })
 
@@ -164,10 +169,17 @@ const Tagger = ({
   }
 
   function submitNewTag() {
-    tags.push(newTag)
-    setNewTag(null)
-    setAddTagMode(false)
-    setTagsVisible(true)
+    // wtf? So for some reason if we don't delay for a short while, setting the state does not
+    // always cause a re-render... force a short wait
+    new Promise(resolve => {
+      setTimeout(() => {
+        setAllTags(allTags.concat([newTag]))
+        setAddTagMode(false)
+        setNewTag(null)
+        setTagsVisible(true, true)
+        resolve()
+      }, 100)
+    })
   }
 
   return (
@@ -187,7 +199,7 @@ const Tagger = ({
           <canvas width={720} ref={canvasRef}>
           </canvas>
           { tagsVisible ?
-            tags.map((tag, index) => {
+            allTags.map((tag, index) => {
               const tagStyle = {
                 left: tag.left * resizeRatio,
                 top: tag.top * resizeRatio,
@@ -197,21 +209,25 @@ const Tagger = ({
                 cursor: addTagMode ? '' : 'pointer'
               }
               const tagNameStyle = {
-                "background-color": tagColors[index]
+                "backgroundColor": tagColors[index]
               }
-              return <div className="reactPictureTagger-tag" style={ tagStyle } >
+              return <div key={`tag-${tag.name}-${index}`} className="reactPictureTagger-tag" style={ tagStyle } >
                 <span className="reactPictureTagger-tagName" style={ tagNameStyle }>{tag.name}</span>
               </div>
             })
           : null }
 
-          { newTag ?  <TagCreator
-                        newTag={newTag}
-                        clearTag={clearNewTag}
-                        submitTag={submitNewTag}
-                      />
+          { newTag ? <React.Fragment>
+              <TagCreator
+                newTag={newTag}
+                clearTag={clearNewTag}
+                submitTag={submitNewTag}
+              />
+              <div className="reactPictureTagger-newTag-instructions">
+                Press Enter key to save tag. Escape to cancel
+              </div>
+            </React.Fragment>
           : null }
-
         </div>
       </div>
   )
