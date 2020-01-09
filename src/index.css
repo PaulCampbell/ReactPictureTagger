@@ -43,6 +43,24 @@
   padding:3px;
 }
 
+.reactPictureTagger-tag-name {
+  background-color: rgba(0,0,0, 0.8);
+  color: white;
+  width: 100%;
+  min-width:120px;
+  border: solid 1px #e7e7e7;
+  font-weight: bold;
+  padding: 3px;
+}
+
+.reactPictureTagger-tag-upateControls {
+  font-size: 2.4em;
+  padding-top: 6px;
+}
+.reactPictureTagger-tag-upateControls a {
+  margin: 3px;
+}
+
 .reactPictureTagger-newTag-name {
   background-color: rgba(0,0,0, 0.8);
   color: white;

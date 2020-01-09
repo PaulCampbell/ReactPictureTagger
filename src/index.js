@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faEyeSlash, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faEye, faEyeSlash, faTrash, faPlus, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import './index.css'
 import TagCreator from './TagCreator'
 
@@ -19,6 +19,7 @@ const Tagger = ({
   const [rect, setRect] = useState({})
   const [drag, setDrag] = useState(false)
   const [newTag, setNewTag] = useState(null)
+  const [editingTag, setEditingTag] = useState(null)
 
   const canvasRef = useRef(null)
 
@@ -38,16 +39,24 @@ const Tagger = ({
   ]
 
   function toggleTags() {
-    if(!addTagMode) {
-      setTagsVisible(!tagsVisible)
+    if(addTagMode) {
+      toggleAddTagMode()
     }
+    setTagsVisible(!tagsVisible)
   }
 
   function toggleAddTagMode() {
     if(!addTagMode) {
       setTagsVisible(false)
+      setEditingTag(null)
     }
     setAddTagMode(!addTagMode)
+  }
+
+  function editTag(tagIndex, tagName) {
+    if(!editingTag) {
+      setEditingTag({ index: tagIndex, name: tagName })
+    }
   }
 
   function relMouseCoords(event){
@@ -190,6 +199,29 @@ const Tagger = ({
     })
   }
 
+  function handleChangeTagName(ev) {
+    const { value } = ev.target
+    setEditingTag(
+      Object.assign(editingTag, { name: value})
+    )
+  }
+
+  function saveEditedTag() {
+    allTags[editingTag.index].name = editingTag.name
+    setAllTags(allTags)
+    setEditingTag(null)
+  }
+
+  function cancelEditedTag() {
+    setEditingTag(null)
+  }
+
+  function deleteTag() {
+    allTags.splice(editingTag.index, 1)
+    setAllTags(allTags)
+    setEditingTag(null)
+  }
+
   return (
       <div className="reactPictureTagger" style={addTagMode ? { cursor: 'copy'} : null }>
         <div className="reactPictureTagger-tagControls">
@@ -214,13 +246,41 @@ const Tagger = ({
                 width: tag.width * resizeRatio,
                 height: tag.height * resizeRatio,
                 borderColor: tagColors[index],
-                cursor: addTagMode ? '' : 'pointer'
+                cursor: addTagMode ? '' : 'pointer',
+                opacity: editingTag && editingTag.index === index ? 1 : 0.6
               }
               const tagNameStyle = {
                 "backgroundColor": tagColors[index % tagColors.length]
               }
-              return <div key={`tag-${tag.name}-${index}`} className="reactPictureTagger-tag" style={ tagStyle } >
-                <span className="reactPictureTagger-tagName" style={ tagNameStyle }>{tag.name}</span>
+              return <div onClick={() => editTag(index, tag.name)} key={`tag-${index}`} className="reactPictureTagger-tag" style={ tagStyle } >
+                {
+                  editingTag && editingTag.index === index ?
+                  <input
+                    id="name"
+                    className="reactPictureTagger-tag-name"
+                    placeholder='Tag name'
+                    name="name"
+                    value={editingTag.name}
+                    type="text"
+                    onChange={handleChangeTagName}
+                  />
+                  : <span className="reactPictureTagger-tagName" style={ tagNameStyle }>{tag.name}</span>
+                }
+                {
+                  editingTag && editingTag.index === index ?
+                    <div className="reactPictureTagger-tag-upateControls">
+                      <a onClick={() => saveEditedTag(index)} title="Save">
+                        <FontAwesomeIcon icon={faCheckCircle} style={{ color: "#00de33" }} />
+                      </a>
+                      <a onClick={() => cancelEditedTag()} title="Cancel">
+                        <FontAwesomeIcon icon={faTimesCircle} style={{ color: "#f8f9fa" }} />
+                      </a>
+                      <a onClick={() => deleteTag()} title="Delete">
+                        <FontAwesomeIcon icon={faTrash} style={{ color: "#de0000" }} />
+                      </a>
+                    </div>
+                    : null
+                }
               </div>
             })
           : null }

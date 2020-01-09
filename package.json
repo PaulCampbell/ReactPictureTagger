@@ -1,6 +1,6 @@
 {
-  "name": "picture-tagger",
-  "version": "1.0.0",
+  "name": "react-picture-tagger",
+  "version": "0.0.1",
   "main": "index.js",
   "author": "paulcampbell <paulgcampbell@gmail.com>",
   "license": "MIT",
