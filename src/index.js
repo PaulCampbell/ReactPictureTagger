@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash, faPlus } from '@fortawesome/free-solid-svg-icons'
 import './index.css'
+import TagCreator from './TagCreator'
 
 const Tagger = ({
   imageSrc,
@@ -44,7 +45,7 @@ const Tagger = ({
     var canvasY = 0;
     var currentElement = this;
 
-    do{
+    do {
       totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
       totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
     }
@@ -158,6 +159,17 @@ const Tagger = ({
     }
   })
 
+  function clearNewTag() {
+    setNewTag(null)
+  }
+
+  function submitNewTag() {
+    tags.push(newTag)
+    setNewTag(null)
+    setAddTagMode(false)
+    setTagsVisible(true)
+  }
+
   return (
       <div className="reactPictureTagger" style={addTagMode ? { cursor: 'copy'} : null }>
         <div className="reactPictureTagger-tagControls">
@@ -193,20 +205,13 @@ const Tagger = ({
             })
           : null }
 
-
-          { newTag ?
-              <div className="reactPictureTagger-newTag"
-                   style={
-                     {
-                        left: newTag.left,
-                        top: newTag.top,
-                        width: newTag.width,
-                        height: newTag.height
-                     }
-                   }>
-              new tag, yo!
-              </div>
+          { newTag ?  <TagCreator
+                        newTag={newTag}
+                        clearTag={clearNewTag}
+                        submitTag={submitNewTag}
+                      />
           : null }
+
         </div>
       </div>
   )
