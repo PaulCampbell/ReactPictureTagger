@@ -15,13 +15,12 @@ const App = () => {
     })
     return (
           <React.Fragment>
-            <GithubRibbon />
-            <div className="container my-5">
-              <div className="row mt-5">
-                <div className="col-12 d-flex justify-content-center mt-5">
-                  <PictureTagger.Tagger {...examplePictureTagger} />
-                </div>
-              </div>
+            <div>
+              <GithubRibbon />
+              <h1>React Picture Tagger</h1>
+            </div>
+            <div>
+              <PictureTagger.Tagger {...examplePictureTagger} />
             </div>
           </React.Fragment>
         )

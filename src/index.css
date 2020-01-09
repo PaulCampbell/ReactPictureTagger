@@ -23,3 +23,7 @@
   font-weight: bold;
   padding: 3px;
 }
+
+.tag-controls i {
+  color: #999;
+}
