@@ -42,24 +42,24 @@ const Tagger = ({
   }
 
   function relMouseCoords(event){
-    var totalOffsetX = 0;
-    var totalOffsetY = 0;
-    var canvasX = 0;
-    var canvasY = 0;
-    var currentElement = this;
+    var totalOffsetX = 0
+    var totalOffsetY = 0
+    var canvasX = 0
+    var canvasY = 0
+    var currentElement = this
 
     do {
-      totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
-      totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
+      totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft
+      totalOffsetY += currentElement.offsetTop - currentElement.scrollTop
     }
     while(currentElement = currentElement.offsetParent)
 
-    canvasX = event.pageX - totalOffsetX;
-    canvasY = event.pageY - totalOffsetY;
+    canvasX = event.pageX - totalOffsetX
+    canvasY = event.pageY - totalOffsetY
 
     return {x:canvasX, y:canvasY}
   }
-  HTMLCanvasElement.prototype.relMouseCoords = relMouseCoords;
+  HTMLCanvasElement.prototype.relMouseCoords = relMouseCoords
 
 
   function drawImageOnCanvas() {
@@ -67,7 +67,7 @@ const Tagger = ({
       const canvas = canvasRef.current
       const context = canvas.getContext('2d')
       const imageAspectRatio = image.height / image.width
-      canvas.height = canvas.width * imageAspectRatio;
+      canvas.height = canvas.width * imageAspectRatio
       setImageWidth(image.width)
       setResizeRatio(canvas.scrollWidth / image.width)
       context.drawImage(image, 0, 0, canvas.width, canvas.height)
@@ -150,17 +150,23 @@ const Tagger = ({
     setResizeRatio(newRatio)
   }
 
+  function handleEscape(e) {
+    if(e.keyCode == 27 && addTagMode) {
+      return toggleAddTagMode()
+    }
+  }
+
   useEffect(() => {
     const canvas = canvasRef.current
     const context = canvas.getContext('2d')
     drawImageOnCanvas()
     setupCanvasEventListeners()
     window.addEventListener('resize', handleResize)
-    document.addEventListener("keydown", toggleAddTagMode, false);
+    document.addEventListener("keydown", handleEscape, false)
     return () => {
       window.removeEventListener('resize', handleResize)
       removeCanvasEventListeners()
-      document.removeEventListener("keydown", toggleAddTagMode, false);
+      document.removeEventListener("keydown", handleEscape, false)
     }
   })
 
