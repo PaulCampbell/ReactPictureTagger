@@ -24,6 +24,15 @@ const Tagger = ({
 
   const image = new Image()
   image.src = imageSrc
+  image.onload = () => {
+    const canvas = canvasRef.current
+    const context = canvas.getContext('2d')
+    const imageAspectRatio = image.height / image.width
+    canvas.height = canvas.width * imageAspectRatio
+    setImageWidth(image.width)
+    setResizeRatio(canvas.scrollWidth / image.width)
+    context.drawImage(image, 0, 0, canvas.width, canvas.height)
+  }
   const tagColors = [
      '#20629B', '#F6D55C', '#3CAEA3', '#ED553B', '#173f5f',
   ]
@@ -60,19 +69,6 @@ const Tagger = ({
     return {x:canvasX, y:canvasY}
   }
   HTMLCanvasElement.prototype.relMouseCoords = relMouseCoords
-
-
-  function drawImageOnCanvas() {
-    image.onload = () => {
-      const canvas = canvasRef.current
-      const context = canvas.getContext('2d')
-      const imageAspectRatio = image.height / image.width
-      canvas.height = canvas.width * imageAspectRatio
-      setImageWidth(image.width)
-      setResizeRatio(canvas.scrollWidth / image.width)
-      context.drawImage(image, 0, 0, canvas.width, canvas.height)
-    }
-  }
 
   function setupCanvasEventListeners() {
     const canvas = canvasRef.current
@@ -159,7 +155,6 @@ const Tagger = ({
   useEffect(() => {
     const canvas = canvasRef.current
     const context = canvas.getContext('2d')
-    drawImageOnCanvas()
     setupCanvasEventListeners()
     window.addEventListener('resize', handleResize)
     document.addEventListener("keydown", handleEscape, false)
@@ -222,7 +217,7 @@ const Tagger = ({
                 cursor: addTagMode ? '' : 'pointer'
               }
               const tagNameStyle = {
-                "backgroundColor": tagColors[index]
+                "backgroundColor": tagColors[index % tagColors.length]
               }
               return <div key={`tag-${tag.name}-${index}`} className="reactPictureTagger-tag" style={ tagStyle } >
                 <span className="reactPictureTagger-tagName" style={ tagNameStyle }>{tag.name}</span>
