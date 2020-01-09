@@ -6,7 +6,7 @@ import GithubRibbon from './GithubRibbon'
 
 const App = () => {
     const [examplePictureTagger] = usePictureTagger({
-      imageSrc: './muppets.png',
+      imageSrc: './images/muppets.png',
       imgAlt: 'muppets',
       tags: [
         { top: 128, left: 5, width: 180, height: 190, name: 'Rizzo' },
