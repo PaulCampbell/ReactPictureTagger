@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import { faEye, faEyeSlash, faPlus } from '@fortawesome/free-solid-svg-icons'
 import './index.css'
 
 const Tagger = ({
@@ -11,6 +11,7 @@ const Tagger = ({
   tags
 }) => {
   const [tagsVisible, setTagsVisible] = useState(false)
+  const [addTagMode, setAddTagMode] = useState(false)
 
   const tagColors = [
      '#20629B', '#F6D55C', '#3CAEA3', '#ED553B', '#173f5f',
@@ -20,17 +21,25 @@ const Tagger = ({
     setTagsVisible(!tagsVisible)
   }
 
+  function startAddTagMode() {
+    setTagsVisible(true)
+    setAddTagMode(true)
+  }
+
   return (
-      <div className="react-picture-tagger">
-        <div className="tag-controls">
-          <a onClick={toggleTags}>
+      <div className="reactPictureTagger" style={addTagMode ? { cursor: 'copy'} : null }>
+        <div className="reactPictureTagger-tagControls">
+          <a onClick={toggleTags} title={tagsVisible ? "Hide tags" : "Show tags"}>
             { tagsVisible ?
-              <FontAwesomeIcon style={{color:"#666"}} icon={faEyeSlash} />
-              : <FontAwesomeIcon style={{color:"#666"}} icon={faEye} />
+              <FontAwesomeIcon icon={faEyeSlash} />
+              : <FontAwesomeIcon icon={faEye} />
             }
           </a>
+          <a onClick={startAddTagMode} title="Add tag">
+            <FontAwesomeIcon icon={faPlus} />
+          </a>
         </div>
-        <div className="picture-container">
+        <div className="reactPictureTagger-pictureContainer">
           <img src={imageSrc} alt={imageAlt} />
           { tagsVisible ?
             tags.map((tag, index) => {
@@ -44,8 +53,8 @@ const Tagger = ({
               const tagNameStyle = {
                 "background-color": tagColors[index]
               }
-              return <div className="tag" style={ tagStyle } >
-                <span className="tag-name" style={ tagNameStyle }>{tag.name}</span>
+              return <div className="reactPictureTagger-tag" style={ tagStyle } >
+                <span className="reactPictureTagger-tagName" style={ tagNameStyle }>{tag.name}</span>
               </div>
             })
           : null }

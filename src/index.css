@@ -1,29 +1,33 @@
-.picture-container {
+.reactPictureTagger-pictureContainer {
   position: relative;
 }
 
-.picture-container img {
+.reactPictureTagger-pictureContainer img {
   max-width: 100%;
 }
 
-.tag {
+.reactPictureTagger-tag {
   cursor: pointer;
   opacity: 0.6;
   position: absolute;
   border: solid 2px;
 }
 
-.tag:hover {
+.reactPictureTagger-tag:hover {
   opacity: 1;
   display:block;
 }
 
-.tag-name {
+.reactPictureTagger-tagName {
   color: white;
   font-weight: bold;
   padding: 3px;
 }
 
-.tag-controls i {
-  color: #999;
+.reactPictureTagger-tagControls {
+  color: #666;
+}
+
+.reactPictureTagger-tagControls a {
+  padding-right: 8px;
 }
