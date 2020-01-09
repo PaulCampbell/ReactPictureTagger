@@ -14,15 +14,15 @@ const App = () => {
       ]
     })
     return (
-          <React.Fragment>
-            <div>
+          <div>
+            <div style={{color: '#666', textAlign: 'center', padding: '30px 0'}}>
               <GithubRibbon />
               <h1>React Picture Tagger</h1>
             </div>
-            <div>
+            <div style={{ padding: '6px' }}>
               <PictureTagger.Tagger {...examplePictureTagger} />
             </div>
-          </React.Fragment>
+          </div>
         )
 }
 

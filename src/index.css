@@ -25,10 +25,12 @@
 
 .reactPictureTagger-tagControls {
   color: #666;
+  border-top: 1px solid #666;
+  font-size: 1.6em;
 }
 
 .reactPictureTagger-tagControls a {
-  padding-right: 8px;
+  padding: 8px;
 }
 
 .reactPictureTagger-newTag {
