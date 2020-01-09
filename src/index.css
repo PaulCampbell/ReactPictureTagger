@@ -1,0 +1,25 @@
+.picture-container {
+  position: relative;
+}
+
+.picture-container img {
+  max-width: 100%;
+}
+
+.tag {
+  cursor: pointer;
+  opacity: 0.6;
+  position: absolute;
+  border: solid 2px;
+}
+
+.tag:hover {
+  opacity: 1;
+  display:block;
+}
+
+.tag-name {
+  color: white;
+  font-weight: bold;
+  padding: 3px;
+}
