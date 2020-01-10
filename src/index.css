@@ -81,3 +81,16 @@
   font-weight: bold;
   text-align: center;
 }
+
+.reactPictureTagger-tag-deleteButton {
+  cursor: pointer;
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  display: inline-block;
+  background-color: white;
+  border-radius: 50%;
+  padding: 8px;
+  font-size: 1.3em;
+  top: 2px;
+}

@@ -25,6 +25,16 @@ const TagCreator = ({ resizeRatio, tagToEdit, cancelTag, saveTag, deleteTag }) =
     inputRef.current.focus()
   })
 
+  function deleteButtonPositionStyle() {
+    const style = {}
+    if(tag.left < 50) {
+      style.right = '-42px';
+    } else {
+      style.left = '-42px'
+    }
+    return style
+  }
+
   return (
     <div className="reactPictureTagger-newTag"
      style={
@@ -53,11 +63,11 @@ const TagCreator = ({ resizeRatio, tagToEdit, cancelTag, saveTag, deleteTag }) =
         <a onClick={cancelTag} title="Cancel">
           <FontAwesomeIcon icon={faTimesCircle} style={{ color: "#f8f9fa" }} />
         </a>
-        { deleteTag != null ? <a onClick={deleteTag} title="Delete">
-          <FontAwesomeIcon icon={faTrash} style={{ color: "#de0000" }} />
-        </a>
-        : null }
       </div>
+    { deleteTag != null ? <a onClick={deleteTag} className="reactPictureTagger-tag-deleteButton" style={deleteButtonPositionStyle()} title="Delete">
+      <FontAwesomeIcon icon={faTrash} style={{ color: "#de0000" }} />
+      </a>
+      : null }
     </div>
   )
 }
