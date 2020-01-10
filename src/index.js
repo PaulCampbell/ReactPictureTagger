@@ -263,7 +263,6 @@ const Tagger = ({
                 tagToEdit={editingTag}
                 cancelTag={cancelEditedTag}
                 saveTag={submitNewTag}
-                deleteTag={cancelEditedTag}
                 resizeRatio={resizeRatio}
               />
               <div className="reactPictureTagger-newTag-instructions">

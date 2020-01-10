@@ -53,7 +53,7 @@ const TagCreator = ({ resizeRatio, tagToEdit, cancelTag, saveTag, deleteTag }) =
         <a onClick={() => cancelTag()} title="Cancel">
           <FontAwesomeIcon icon={faTimesCircle} style={{ color: "#f8f9fa" }} />
         </a>
-        { (tag.index != null) ? <a onClick={() => deleteTag()} title="Delete">
+        { deleteTag != null ? <a onClick={() => deleteTag()} title="Delete">
           <FontAwesomeIcon icon={faTrash} style={{ color: "#de0000" }} />
         </a>
         : null }
