@@ -50,7 +50,7 @@ const App = () => {
                 </blockquote>
                 <cite>
                   <span>Kermit the Frog</span><br />
-                  Frog
+                  A frog
                 </cite>
             </div>
           </div>

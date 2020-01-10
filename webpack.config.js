@@ -8,8 +8,8 @@ const htmlWebpackPlugin = new HtmlWebpackPlugin({
   filename: "./index.html"
 })
 const copyWebpackPlugin = new CopyWebpackPlugin([{
-  from: path.join(__dirname, "examples/src/images"),
-  to: path.join(__dirname, "examples/dist/images")
+  from: path.join(__dirname, "examples/src/static"),
+  to: path.join(__dirname, "examples/dist/static")
 }])
 
 module.exports = {
