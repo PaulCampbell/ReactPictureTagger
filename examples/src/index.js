@@ -6,7 +6,7 @@ import GithubRibbon from './GithubRibbon'
 
 const pictures = [
   {
-    imageSrc: './images/muppets.png',
+    imageSrc: './static/muppets.png',
     imgAlt: 'Image 1',
     tags: [
       { top: 128, left: 5, width: 180, height: 190, name: 'Rizzo' },
@@ -14,7 +14,7 @@ const pictures = [
     ]
   },
   {
-    imageSrc: './images/muppets2.jpg',
+    imageSrc: './static/muppets2.jpg',
     imgAlt: 'Image 2',
     tags: [
       {"left":335,"top":69,"width":188,"height":218,"name":"kermit"},

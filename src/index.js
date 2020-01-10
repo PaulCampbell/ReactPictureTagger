@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
-import ReactDOM from 'react-dom'
-import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faEyeSlash, faTrash, faPlus, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { faEye, faEyeSlash,  faPlus } from '@fortawesome/free-solid-svg-icons'
 import './index.css'
 import TagCreator from './TagCreator'
 
 const ReactPictureTagger = ({
   imageSrc,
-  imageAlt,
   tags,
   showTags,
   tagsUpdated
@@ -168,8 +165,6 @@ const ReactPictureTagger = ({
   }
 
   useEffect(() => {
-    const canvas = canvasRef.current
-    const context = canvas.getContext('2d')
     setupCanvasEventListeners()
     window.addEventListener('resize', handleResize)
     document.addEventListener("keydown", handleEscape, false)
@@ -281,4 +276,3 @@ const ReactPictureTagger = ({
 }
 
 export default ReactPictureTagger
-
