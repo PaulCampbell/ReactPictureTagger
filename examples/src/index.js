@@ -32,12 +32,23 @@ const App = () => {
   }
 
   return (
-      <div>
-        <div style={{color: '#666', textAlign: 'center', padding: '30px 0'}}>
+      <div style={{maxWidth:"780px", margin: "auto"}}>
+        <div style={{color: '#666', padding: '30px 0'}}>
           <GithubRibbon />
-          <h1>React Picture Tagger</h1>
+          <h1 style={ {textAlign: 'center', marginBottom: '20px'}}>React Picture Tagger</h1>
+          <div class="testimonial-quote group">
+            <div class="quote-container">
+                <blockquote>
+                  <p>Here’s some simple advice: always be yourself. Never take yourself too seriously. And beware the advice from experts, pigs, and members of Parliament.</p>
+                </blockquote>
+                <cite>
+                  <span>Kermit the Frog</span><br />
+                  Frog
+                </cite>
+            </div>
+          </div>
         </div>
-        <div style={{ padding: '6px', maxWidth:"1780px", margin: "auto" }}>
+        <div style={{ padding: '6px'  }}>
           <label style={{paddingRight: '6px'}} htmlFor="selectedImage">Select Image</label>
           <select name="selectedImage" id="selectedImage" onChange={changeImage}>
             { pictures.map((picture, index) => {

@@ -15,7 +15,7 @@ const TagCreator = ({ resizeRatio, tagToEdit, cancelTag, saveTag, deleteTag }) =
 
   function handleSubmit(e) {
     if(e.keyCode == 13) {
-      return saveTag()
+      return saveTag(tag)
     }
     if(e.keyCode == 27) {
       return cancelTag()
