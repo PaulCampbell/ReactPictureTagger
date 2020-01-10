@@ -56,6 +56,7 @@ const Tagger = ({
   function editTag(tagIndex, tag) {
     if(!editingTag) {
       setEditingTag(Object.assign(tag, { index: tagIndex}))
+      setTagsVisible(false)
     }
   }
 
@@ -111,10 +112,10 @@ const Tagger = ({
       setDrag(false)
       setEditingTag({
         index: null,
-        left: rect.startX > rect.finishX ? rect.finishX : rect.startX,
-        top: rect.startY > rect.finishY ? rect.finishY : rect.startY,
-        width: rect.startX > rect.finishX ? rect.startX - rect.finishX : rect.finishX - rect.startX,
-        height: rect.startY > rect.finishY ? rect.startY - rect.finishY : rect.finishY - rect.startY,
+        left: (rect.startX > rect.finishX ? rect.finishX : rect.startX) / resizeRatio,
+        top: (rect.startY > rect.finishY ? rect.finishY : rect.startY) / resizeRatio,
+        width: (rect.startX > rect.finishX ? rect.startX - rect.finishX : rect.finishX - rect.startX) / resizeRatio,
+        height: (rect.startY > rect.finishY ? rect.startY - rect.finishY : rect.finishY - rect.startY) / resizeRatio,
         name: ''
       })
       setAddTagMode(false)
@@ -175,41 +176,39 @@ const Tagger = ({
     }
   })
 
-  function submitNewTag() {
+  function submitNewTag(newTag) {
     // wtf? So for some reason if we don't delay for a short while, setting the state does not
     // always cause a re-render... force a short wait
     new Promise(resolve => {
       setTimeout(() => {
         setAllTags(allTags.concat([
-          Object.assign(editingTag, {
-            top: editingTag.top,
-            left: editingTag.left,
-            width: editingTag.width,
-            height: editingTag.height
-          })
+          newTag
         ]))
         setAddTagMode(false)
         setEditingTag(null)
-        setTagsVisible(true, true)
+        setTagsVisible(true)
         resolve()
       }, 100)
     })
   }
 
-  function saveEditedTag() {
-    allTags[editingTag.index].name = editingTag.name
+  function saveEditedTag(editedTag) {
+    allTags[editingTag.index].name = editedTag.name
     setAllTags(allTags)
+    setTagsVisible(true)
     setEditingTag(null)
   }
 
   function cancelEditedTag() {
     setEditingTag(null)
+    setTagsVisible(true)
   }
 
   function deleteTag() {
     allTags.splice(editingTag.index, 1)
     setAllTags(allTags)
     setEditingTag(null)
+    setTagsVisible(true)
   }
 
   return (
@@ -237,25 +236,24 @@ const Tagger = ({
                 height: tag.height * resizeRatio,
                 borderColor: tagColors[index],
                 cursor: addTagMode ? '' : 'pointer',
-                opacity: editingTag && editingTag.index === index ? 1 : 0.6
               }
               const tagNameStyle = {
                 "backgroundColor": tagColors[index % tagColors.length]
               }
-              if(editingTag && editingTag.index === index) {
-                return <TagCreator
-                  tagToEdit={editingTag}
-                  cancelTag={cancelEditedTag}
-                  saveTag={saveEditedTag}
-                  deleteTag={deleteTag}
-                  resizeRatio={resizeRatio}
-                />
-              } else {
-                return <div onClick={() => editTag(index, tag)} key={`tag-${index}`} className="reactPictureTagger-tag" style={ tagStyle } >
-                  <span className="reactPictureTagger-tagName" style={ tagNameStyle }>{tag.name}</span>
-                </div>
-              }
+              return !editingTag ? <div onClick={() => editTag(index, tag)} key={`tag-${index}`} className="reactPictureTagger-tag" style={ tagStyle } >
+                <span className="reactPictureTagger-tagName" style={ tagNameStyle }>{tag.name}</span>
+              </div> : null
             })
+          : null }
+
+          { editingTag && editingTag.index != null ?
+            <TagCreator
+              tagToEdit={editingTag}
+              cancelTag={cancelEditedTag}
+              saveTag={saveEditedTag}
+              deleteTag={deleteTag}
+              resizeRatio={resizeRatio}
+            />
           : null }
 
           { editingTag && editingTag.index === null ? <React.Fragment>

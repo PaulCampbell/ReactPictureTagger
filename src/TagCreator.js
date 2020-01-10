@@ -9,7 +9,8 @@ const TagCreator = ({ resizeRatio, tagToEdit, cancelTag, saveTag, deleteTag }) =
 
   function handleChangeTagName(e) {
     const { value } = e.target
-    setTag(Object.assign(tag, {name: value}))
+    const updatedTag = Object.assign({}, tag, {name: value})
+    setTag(updatedTag)
   }
 
   function handleSubmit(e) {
@@ -27,33 +28,33 @@ const TagCreator = ({ resizeRatio, tagToEdit, cancelTag, saveTag, deleteTag }) =
 
   return (
     <div className="reactPictureTagger-newTag"
-         style={
-           {
-              left: tag.left,
-              top: tag.top,
-              width: tag.width,
-              height: tag.height
-           }
-         }>
+     style={
+       {
+          left: tag.left * resizeRatio,
+          top: tag.top * resizeRatio,
+          width: tag.width * resizeRatio,
+          height: tag.height * resizeRatio
+       }
+     }>
       <input
         id="name"
         className="reactPictureTagger-newTag-name"
         placeholder='Tag name'
         name="name"
-        // value={tag.name}
+        value={tag.name}
         type="text"
         ref={inputRef}
         onChange={handleChangeTagName}
         onKeyDown={handleSubmit}
       />
       <div className="reactPictureTagger-tag-upateControls">
-        <a onClick={() => saveTag(tag.index)} title="Save">
+        <a onClick={() => saveTag(tag)} title="Save">
           <FontAwesomeIcon icon={faCheckCircle} style={{ color: "#00de33" }} />
         </a>
-        <a onClick={() => cancelTag()} title="Cancel">
+        <a onClick={cancelTag} title="Cancel">
           <FontAwesomeIcon icon={faTimesCircle} style={{ color: "#f8f9fa" }} />
         </a>
-        { deleteTag != null ? <a onClick={() => deleteTag()} title="Delete">
+        { deleteTag != null ? <a onClick={deleteTag} title="Delete">
           <FontAwesomeIcon icon={faTrash} style={{ color: "#de0000" }} />
         </a>
         : null }

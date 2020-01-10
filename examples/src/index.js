@@ -37,7 +37,7 @@ const App = () => {
           <GithubRibbon />
           <h1>React Picture Tagger</h1>
         </div>
-        <div style={{ padding: '6px', maxWidth:"780px", margin: "auto" }}>
+        <div style={{ padding: '6px', maxWidth:"1780px", margin: "auto" }}>
           <label style={{paddingRight: '6px'}} htmlFor="selectedImage">Select Image</label>
           <select name="selectedImage" id="selectedImage" onChange={changeImage}>
             { pictures.map((picture, index) => {
