@@ -1,8 +1,10 @@
 # ReactPictureTagger
 
-It's a react component for taggin pictures...
+It's a react component for tagging pictures...
 
 ![example screen grab](./demo_gif.gif "Screen Grab")
+
+Could be useful for your data if you're doing something with an r-cnn.
 
 ## Try it out
 
@@ -31,10 +33,10 @@ const App = () => {
   }
 
   return (
-    <PictureTagger.Tagger
-      imageSrc={activePicture.imageSrc}
-      imageAlt={activePicture.imageAlt}
-      tags={picture}
+    <ReactPictureTagger
+      imageSrc={picture.imageSrc}
+      imageAlt={picture.imageAlt}
+      tags={picture.tags}
       showTags={true}
       tagsUpdated={tagsUpdated}
       />
