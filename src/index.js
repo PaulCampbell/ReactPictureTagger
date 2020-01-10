@@ -6,7 +6,7 @@ import { faEye, faEyeSlash, faTrash, faPlus, faCheckCircle, faTimesCircle } from
 import './index.css'
 import TagCreator from './TagCreator'
 
-const Tagger = ({
+const ReactPictureTagger = ({
   imageSrc,
   imageAlt,
   tags,
@@ -116,10 +116,10 @@ const Tagger = ({
       setDrag(false)
       setEditingTag({
         index: null,
-        left: (rect.startX > rect.finishX ? rect.finishX : rect.startX) / resizeRatio,
-        top: (rect.startY > rect.finishY ? rect.finishY : rect.startY) / resizeRatio,
-        width: (rect.startX > rect.finishX ? rect.startX - rect.finishX : rect.finishX - rect.startX) / resizeRatio,
-        height: (rect.startY > rect.finishY ? rect.startY - rect.finishY : rect.finishY - rect.startY) / resizeRatio,
+        left: Math.round((rect.startX > rect.finishX ? rect.finishX : rect.startX) / resizeRatio),
+        top: Math.round((rect.startY > rect.finishY ? rect.finishY : rect.startY) / resizeRatio),
+        width: Math.round((rect.startX > rect.finishX ? rect.startX - rect.finishX : rect.finishX - rect.startX) / resizeRatio),
+        height: Math.round((rect.startY > rect.finishY ? rect.startY - rect.finishY : rect.finishY - rect.startY) / resizeRatio),
         name: ''
       })
       setAddTagMode(false)
@@ -280,7 +280,5 @@ const Tagger = ({
   )
 }
 
-const ReactPictureTagger = () => {}
-ReactPictureTagger.Tagger = Tagger
 export default ReactPictureTagger
 

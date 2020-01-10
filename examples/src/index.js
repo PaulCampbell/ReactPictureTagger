@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { render } from 'react-dom'
 
-import PictureTagger, { changeTags } from '../../src'
+import ReactPictureTagger from '../../src'
 import GithubRibbon from './GithubRibbon'
 
 const pictures = [
@@ -17,17 +17,14 @@ const pictures = [
     imageSrc: './images/muppets2.jpg',
     imgAlt: 'Image 2',
     tags: [
-      {"left":699,"top":210,"width":95,"height":116,"name":"mug"},
-      {"left":377,"top":221,"width":115,"height":114,"name":"mug"},
-      {"left":0,"top":236,"width":71,"height":118,"name":"mug"}
+      {"left":335,"top":69,"width":188,"height":218,"name":"kermit"},
+      {"left":72,"top":41,"width":215,"height":206,"name":"gonzo"}
     ]
   }
 ]
 
 const App = () => {
   const [activePicture, setActivePicture] = useState(pictures[0])
-
-  let pictureTagger = <PictureTagger.Tagger {...activePicture} />
 
   function changeImage(ev) {
     const {value} = ev.target
@@ -65,7 +62,7 @@ const App = () => {
             })
             }
           </select>
-          <PictureTagger.Tagger
+          <ReactPictureTagger
             imageSrc={activePicture.imageSrc}
             imageAlt={activePicture.imageAlt}
             tags={activePicture.tags}
@@ -77,7 +74,7 @@ const App = () => {
           <h2>Tags</h2>
           <ul>
           {
-            activePicture.tags.map(tag => <li>{tag.name}</li> )
+            activePicture.tags.map(tag => <li>{JSON.stringify(tag)}</li> )
           }
           </ul>
         </div>
