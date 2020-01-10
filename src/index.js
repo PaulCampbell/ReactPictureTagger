@@ -9,16 +9,16 @@ import TagCreator from './TagCreator'
 const Tagger = ({
   imageSrc,
   imageAlt,
-  tags
+  tags,
+  showTags
 }) => {
   const [allTags, setAllTags] = useState(tags)
-  const [tagsVisible, setTagsVisible] = useState(false)
+  const [tagsVisible, setTagsVisible] = useState(showTags)
   const [addTagMode, setAddTagMode] = useState(false)
   const [imageWidth, setImageWidth] = useState(null)
   const [resizeRatio, setResizeRatio] = useState(1)
   const [rect, setRect] = useState({})
   const [drag, setDrag] = useState(false)
-  const [newTag, setNewTag] = useState(null)
   const [editingTag, setEditingTag] = useState(null)
 
   const canvasRef = useRef(null)
@@ -53,9 +53,9 @@ const Tagger = ({
     setAddTagMode(!addTagMode)
   }
 
-  function editTag(tagIndex, tagName) {
+  function editTag(tagIndex, tag) {
     if(!editingTag) {
-      setEditingTag({ index: tagIndex, name: tagName })
+      setEditingTag(Object.assign(tag, { index: tagIndex}))
     }
   }
 
@@ -109,7 +109,8 @@ const Tagger = ({
   function mouseUp() {
     if(drag) {
       setDrag(false)
-      setNewTag({
+      setEditingTag({
+        index: null,
         left: rect.startX > rect.finishX ? rect.finishX : rect.startX,
         top: rect.startY > rect.finishY ? rect.finishY : rect.startY,
         width: rect.startX > rect.finishX ? rect.startX - rect.finishX : rect.finishX - rect.startX,
@@ -174,36 +175,25 @@ const Tagger = ({
     }
   })
 
-  function clearNewTag() {
-    setNewTag(null)
-  }
-
   function submitNewTag() {
     // wtf? So for some reason if we don't delay for a short while, setting the state does not
     // always cause a re-render... force a short wait
     new Promise(resolve => {
       setTimeout(() => {
         setAllTags(allTags.concat([
-          Object.assign(newTag, {
-            top: newTag.top / resizeRatio,
-            left: newTag.left / resizeRatio,
-            width: newTag.width / resizeRatio,
-            height: newTag.height / resizeRatio
+          Object.assign(editingTag, {
+            top: editingTag.top,
+            left: editingTag.left,
+            width: editingTag.width,
+            height: editingTag.height
           })
         ]))
         setAddTagMode(false)
-        setNewTag(null)
+        setEditingTag(null)
         setTagsVisible(true, true)
         resolve()
       }, 100)
     })
-  }
-
-  function handleChangeTagName(ev) {
-    const { value } = ev.target
-    setEditingTag(
-      Object.assign(editingTag, { name: value})
-    )
   }
 
   function saveEditedTag() {
@@ -252,44 +242,29 @@ const Tagger = ({
               const tagNameStyle = {
                 "backgroundColor": tagColors[index % tagColors.length]
               }
-              return <div onClick={() => editTag(index, tag.name)} key={`tag-${index}`} className="reactPictureTagger-tag" style={ tagStyle } >
-                {
-                  editingTag && editingTag.index === index ?
-                  <input
-                    id="name"
-                    className="reactPictureTagger-tag-name"
-                    placeholder='Tag name'
-                    name="name"
-                    value={editingTag.name}
-                    type="text"
-                    onChange={handleChangeTagName}
-                  />
-                  : <span className="reactPictureTagger-tagName" style={ tagNameStyle }>{tag.name}</span>
-                }
-                {
-                  editingTag && editingTag.index === index ?
-                    <div className="reactPictureTagger-tag-upateControls">
-                      <a onClick={() => saveEditedTag(index)} title="Save">
-                        <FontAwesomeIcon icon={faCheckCircle} style={{ color: "#00de33" }} />
-                      </a>
-                      <a onClick={() => cancelEditedTag()} title="Cancel">
-                        <FontAwesomeIcon icon={faTimesCircle} style={{ color: "#f8f9fa" }} />
-                      </a>
-                      <a onClick={() => deleteTag()} title="Delete">
-                        <FontAwesomeIcon icon={faTrash} style={{ color: "#de0000" }} />
-                      </a>
-                    </div>
-                    : null
-                }
-              </div>
+              if(editingTag && editingTag.index === index) {
+                return <TagCreator
+                  tagToEdit={editingTag}
+                  cancelTag={cancelEditedTag}
+                  saveTag={saveEditedTag}
+                  deleteTag={deleteTag}
+                  resizeRatio={resizeRatio}
+                />
+              } else {
+                return <div onClick={() => editTag(index, tag)} key={`tag-${index}`} className="reactPictureTagger-tag" style={ tagStyle } >
+                  <span className="reactPictureTagger-tagName" style={ tagNameStyle }>{tag.name}</span>
+                </div>
+              }
             })
           : null }
 
-          { newTag ? <React.Fragment>
+          { editingTag && editingTag.index === null ? <React.Fragment>
               <TagCreator
-                newTag={newTag}
-                clearTag={clearNewTag}
-                submitTag={submitNewTag}
+                tagToEdit={editingTag}
+                cancelTag={cancelEditedTag}
+                saveTag={submitNewTag}
+                deleteTag={cancelEditedTag}
+                resizeRatio={resizeRatio}
               />
               <div className="reactPictureTagger-newTag-instructions">
                 Press Enter key to save tag. Escape to cancel
@@ -305,12 +280,3 @@ const ReactPictureTagger = () => {}
 ReactPictureTagger.Tagger = Tagger
 export default ReactPictureTagger
 
-export const usePictureTagger = ({imageSrc, imageAlt, tags}) => {
-  return [
-    {
-      imageSrc,
-      imageAlt,
-      tags
-    }
-  ]
-}
