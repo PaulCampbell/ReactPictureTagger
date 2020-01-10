@@ -10,9 +10,13 @@ const Tagger = ({
   imageSrc,
   imageAlt,
   tags,
-  showTags
+  showTags,
+  tagsUpdated
 }) => {
-  const [allTags, setAllTags] = useState(tags)
+  const [allTags, setAllTags] = useState([...tags])
+  useEffect(() => {
+    setAllTags(tags)
+  }, [tags])
   const [tagsVisible, setTagsVisible] = useState(showTags)
   const [addTagMode, setAddTagMode] = useState(false)
   const [imageWidth, setImageWidth] = useState(null)
@@ -181,9 +185,10 @@ const Tagger = ({
     // always cause a re-render... force a short wait
     new Promise(resolve => {
       setTimeout(() => {
-        setAllTags(allTags.concat([
-          newTag
-        ]))
+        delete newTag.index
+        const newTags = allTags.concat([newTag])
+        setAllTags(newTags)
+        tagsUpdated(newTags)
         setAddTagMode(false)
         setEditingTag(null)
         setTagsVisible(true)
@@ -194,9 +199,10 @@ const Tagger = ({
 
   function saveEditedTag(editedTag) {
     allTags[editingTag.index].name = editedTag.name
-    setAllTags(allTags)
-    setTagsVisible(true)
     setEditingTag(null)
+    setAllTags(allTags)
+    tagsUpdated(allTags)
+    setTagsVisible(true)
   }
 
   function cancelEditedTag() {
@@ -207,6 +213,7 @@ const Tagger = ({
   function deleteTag() {
     allTags.splice(editingTag.index, 1)
     setAllTags(allTags)
+    tagsUpdated(allTags)
     setEditingTag(null)
     setTagsVisible(true)
   }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { render } from 'react-dom'
 
-import PictureTagger, { usePictureTagger } from '../../src'
+import PictureTagger, { changeTags } from '../../src'
 import GithubRibbon from './GithubRibbon'
 
 const pictures = [
@@ -17,8 +17,9 @@ const pictures = [
     imageSrc: './images/muppets2.jpg',
     imgAlt: 'Image 2',
     tags: [
-      { top: 78, left: 80, width: 180, height: 190, name: 'Gonzo' },
-      { top: 8, left: 180, width: 500, height:410, name: 'Gonzo' },
+      {"left":699,"top":210,"width":95,"height":116,"name":"mug"},
+      {"left":377,"top":221,"width":115,"height":114,"name":"mug"},
+      {"left":0,"top":236,"width":71,"height":118,"name":"mug"}
     ]
   }
 ]
@@ -26,9 +27,15 @@ const pictures = [
 const App = () => {
   const [activePicture, setActivePicture] = useState(pictures[0])
 
+  let pictureTagger = <PictureTagger.Tagger {...activePicture} />
+
   function changeImage(ev) {
     const {value} = ev.target
     setActivePicture(pictures[value])
+  }
+
+  function tagsUpdated(tags) {
+    setActivePicture(Object.assign({}, activePicture, {tags}))
   }
 
   return (
@@ -36,8 +43,8 @@ const App = () => {
         <div style={{color: '#666', padding: '30px 0'}}>
           <GithubRibbon />
           <h1 style={ {textAlign: 'center', marginBottom: '20px'}}>React Picture Tagger</h1>
-          <div class="testimonial-quote group">
-            <div class="quote-container">
+          <div className="testimonial-quote group">
+            <div className="quote-container">
                 <blockquote>
                   <p>Here’s some simple advice: always be yourself. Never take yourself too seriously. And beware the advice from experts, pigs, and members of Parliament.</p>
                 </blockquote>
@@ -58,7 +65,21 @@ const App = () => {
             })
             }
           </select>
-          <PictureTagger.Tagger {...activePicture} />
+          <PictureTagger.Tagger
+            imageSrc={activePicture.imageSrc}
+            imageAlt={activePicture.imageAlt}
+            tags={activePicture.tags}
+            showTags={true}
+            tagsUpdated={tagsUpdated}
+            />
+        </div>
+        <div>
+          <h2>Tags</h2>
+          <ul>
+          {
+            activePicture.tags.map(tag => <li>{tag.name}</li> )
+          }
+          </ul>
         </div>
       </div>
     )

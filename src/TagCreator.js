@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
 const TagCreator = ({ resizeRatio, tagToEdit, cancelTag, saveTag, deleteTag }) => {
-  console.log(tagToEdit)
   const [tag, setTag] = useState(tagToEdit)
   const inputRef = useRef(null)
 
