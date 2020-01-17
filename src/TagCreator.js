@@ -28,7 +28,7 @@ const TagCreator = ({ resizeRatio, tagToEdit, cancelTag, saveTag, deleteTag }) =
   function deleteButtonPositionStyle() {
     const style = {}
     if(tag.left < 50) {
-      style.right = '-42px';
+      style.right = '-42px'
     } else {
       style.left = '-42px'
     }

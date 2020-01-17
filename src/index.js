@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faEyeSlash,  faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faEye, faEyeSlash, faPlus } from '@fortawesome/free-solid-svg-icons'
 import './index.css'
 import TagCreator from './TagCreator'
 

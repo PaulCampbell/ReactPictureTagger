@@ -39,4 +39,4 @@ module.exports = {
     port: 3001,
     contentBase: path.join(__dirname, 'examples/src')
   }
-};
+}
