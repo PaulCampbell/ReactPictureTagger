@@ -21,6 +21,9 @@
   color: white;
   font-weight: bold;
   padding: 3px;
+  position: absolute;
+  top: -21px;
+  left: -2px;
 }
 
 .reactPictureTagger-tagControls {
