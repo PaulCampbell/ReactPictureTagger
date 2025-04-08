@@ -7,10 +7,12 @@ const htmlWebpackPlugin = new HtmlWebpackPlugin({
   template: path.join(__dirname, "examples/src/index.html"),
   filename: "./index.html"
 })
-const copyWebpackPlugin = new CopyWebpackPlugin([{
-  from: path.join(__dirname, "examples/src/static"),
-  to: path.join(__dirname, "examples/dist/static")
-}])
+const copyWebpackPlugin = new CopyWebpackPlugin({
+  patterns: [{
+    from: path.join(__dirname, "examples/src/static"),
+    to: path.join(__dirname, "examples/dist/static")
+  }]
+})
 
 module.exports = {
   entry: path.join(__dirname, "examples/src/index.js"),
@@ -37,6 +39,8 @@ module.exports = {
   },
   devServer: {
     port: 3001,
-    contentBase: path.join(__dirname, 'examples/src')
+    static: {
+      directory: path.join(__dirname, 'examples/src')
+    }
   }
 }

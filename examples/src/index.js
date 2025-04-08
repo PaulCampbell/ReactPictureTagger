@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { render } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 
 import ReactPictureTagger from '../../src'
 import GithubRibbon from './GithubRibbon'
@@ -43,7 +43,7 @@ const App = () => {
           <div className="testimonial-quote group">
             <div className="quote-container">
                 <blockquote>
-                  <p>Here’s some simple advice: always be yourself. Never take yourself too seriously. And beware the advice from experts, pigs, and members of Parliament.</p>
+                  <p>Here&apos;s some simple advice: always be yourself. Never take yourself too seriously. And beware the advice from experts, pigs, and members of Parliament.</p>
                 </blockquote>
                 <cite>
                   <span>Kermit the Frog</span><br />
@@ -82,4 +82,5 @@ const App = () => {
     )
 }
 
-render(<App />, document.getElementById('root'))
+const root = createRoot(document.getElementById('root'))
+root.render(<App />)

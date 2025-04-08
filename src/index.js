@@ -61,48 +61,49 @@ const ReactPictureTagger = ({
     }
   }
 
-  function relMouseCoords(event){
-    var totalOffsetX = 0
-    var totalOffsetY = 0
-    var canvasX = 0
-    var canvasY = 0
-    var currentElement = this
+  function relMouseCoords(event) {
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
 
-    do {
-      totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft
-      totalOffsetY += currentElement.offsetTop - currentElement.scrollTop
-    }
-    while(currentElement = currentElement.offsetParent)
-
-    canvasX = event.pageX - totalOffsetX - window.scrollX
-    canvasY = event.pageY - totalOffsetY - window.scrollY
-
-    return {x:canvasX, y:canvasY}
+    return {
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top,
+    };
   }
-  HTMLCanvasElement.prototype.relMouseCoords = relMouseCoords
 
   function setupCanvasEventListeners() {
     const canvas = canvasRef.current
+    // Mouse events
     canvas.addEventListener('mousedown', mouseDown, false)
     canvas.addEventListener('mouseup', mouseUp, false)
     canvas.addEventListener('mousemove', mouseMove, false)
+    // Touch events
+    canvas.addEventListener('touchstart', mouseDown, false)
+    canvas.addEventListener('touchend', mouseUp, false)
+    canvas.addEventListener('touchmove', mouseMove, { passive: false })
   }
+
 
   function removeCanvasEventListeners() {
     const canvas = canvasRef.current
+    // Mouse events
     canvas.removeEventListener('mousedown', mouseDown)
     canvas.removeEventListener('mouseup', mouseUp)
     canvas.removeEventListener('mousemove', mouseMove)
+    // Touch events
+    canvas.removeEventListener('touchstart', mouseDown)
+    canvas.removeEventListener('touchend', mouseUp)
+    canvas.removeEventListener('touchmove', mouseMove)
   }
 
   function mouseDown(e) {
     if(addTagMode) {
-      const canvas = canvasRef.current
+      const coords = relMouseCoords(e.touches?.[0] || e)
       setRect(Object.assign(rect, {
-        startX: canvas.relMouseCoords(e).x,
-        startY: canvas.relMouseCoords(e).y,
-        finishX: canvas.relMouseCoords(e).x,
-        finishY: canvas.relMouseCoords(e).y,
+        startX: coords.x,
+        startY: coords.y,
+        finishX: coords.x,
+        finishY: coords.y,
       }))
       setDrag(true)
     }
@@ -125,10 +126,11 @@ const ReactPictureTagger = ({
 
   function mouseMove(e) {
     if (drag) {
-      const canvas = canvasRef.current
+      e.preventDefault(); // Prevent scrolling while drawing on mobile
+      const coords = relMouseCoords(e.touches?.[0] || e)
       setRect(Object.assign(rect, {
-        finishX: canvas.relMouseCoords(e).x,
-        finishY: canvas.relMouseCoords(e).y
+        finishX: coords.x,
+        finishY: coords.y
       }))
       draw()
     }
